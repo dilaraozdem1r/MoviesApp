@@ -1,23 +1,52 @@
-import logo from './logo.svg';
+
 import './App.css';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import Navbar from './components/Navbar/Navbar';
+import Header from './components/Header/Header';
+import axios from 'axios';
+import Movies from './components/Movies/Movies';
+import MovieItem from './components/Movies/MovieItem';
+
+const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
+const apiKey = process.env.REACT_APP_API_KEY;
+
+
+
+const getMovies = () => {
+
+  return dispatch => {
+    axios.get(`${apiEndpoint}api_key=${apiKey}&language=tr-TR&page=1`) // veya istediğiniz API URL'si
+      .then(response => {
+        const movies = response.data;
+     
+        dispatch({
+          type: 'GET_MOVIES',
+          payload: movies.results,
+        });
+
+        
+      })
+      .catch(error => {
+        // Hata durumunda gerekli işlemleri gerçekleştirin
+      });
+  };
+};
+
 
 function App() {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(getMovies());
+  
+  }, [dispatch]);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      <Header />
+      <MovieItem />
     </div>
   );
 }
