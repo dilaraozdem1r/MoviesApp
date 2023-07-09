@@ -1,0 +1,30 @@
+#movie_card{
+  width: 100%;
+  height: 100%;
+  border-radius: 1rem;
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+#movie_card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.4);
+}
+
+#vote_span {
+  position: absolute;
+  width: 18%;
+  top: .5rem;
+  right: .5rem;
+  background-color: #E11299;
+  border-radius:25%;
+  padding: .5rem;
+  color: #fff;
+  font-weight: bold;
+  font-size: .8rem;
+}
+
+#vote_icon{
+  margin-right: .2rem;
+}

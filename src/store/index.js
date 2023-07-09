@@ -3,6 +3,7 @@ import thunk from "redux-thunk";
 
 const initialState = {
   movies: [],
+  searchFilter: "",
 };
 
 const MovieReducer = (state = initialState, action) => {
@@ -12,7 +13,11 @@ const MovieReducer = (state = initialState, action) => {
         ...state,
         movies: action.payload,
       };
-
+    case "SET_SEARCH_FILTER":
+      return {
+        ...state,
+        searchFilter: action.payload,
+      };
     default:
       return state;
   }
