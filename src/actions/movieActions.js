@@ -33,4 +33,20 @@ const setSearchFilter = (filter) => {
     };
   };
 
-export { setSearchFilter, getMovies };
+const addFavorites=(movie)=>{
+  return dispatch =>( dispatch ({
+    type: 'ADD_FAV',
+    payload: movie,
+  })
+  )
+}
+
+const removeFavorites=(movie)=>{
+  return dispatch =>( dispatch({
+    type: 'REMOVE_FAV',
+    payload: movie,
+  })
+  )
+}
+
+export { setSearchFilter, getMovies, addFavorites,removeFavorites };

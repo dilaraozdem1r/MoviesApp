@@ -4,7 +4,8 @@ import thunk from "redux-thunk";
 const initialState = {
   movies: [],
   searchFilter: "",
-  searchEnabled: true
+  searchEnabled: true,
+  favorites: [],
 };
 
 const MovieReducer = (state = initialState, action) => {
@@ -19,7 +20,7 @@ const MovieReducer = (state = initialState, action) => {
         ...state,
         searchFilter: action.payload,
       };
-      case "ENABLE_SEARCH":
+    case "ENABLE_SEARCH":
       return {
         ...state,
         searchEnabled: true,
@@ -29,6 +30,24 @@ const MovieReducer = (state = initialState, action) => {
         ...state,
         searchEnabled: false,
       };
+
+    case "ADD_FAV":
+      const movieToAdd = action.payload;
+      return {
+        ...state,
+        favorites: [...state.favorites, movieToAdd],
+      };
+    case "REMOVE_FAV":
+      const movieToRemove = action.payload;
+      const updatedFavorites = state.favorites.filter(
+        (movie) => movie.id !== movieToRemove.id
+      );
+
+      return {
+        ...state,
+        favorites: updatedFavorites,
+      };
+      
     default:
       return state;
   }

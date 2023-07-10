@@ -16,11 +16,11 @@ const HomePage = () => {
   
 
     return (
-        <div>
+      <React.Fragment>
       <Navbar />
       <Header />
       <MovieList />
-      </div>
+      </React.Fragment>
 
     )
 }

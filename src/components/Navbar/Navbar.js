@@ -34,9 +34,9 @@ const Navbar = () => {
               </Link>
             </li>
             <li className="nav-item text-white">
-              <a className="nav-link text-white" href="#">
+            <Link className="nav-link active text-white" aria-current="page" to="/favorites">
                 Favori Filmler
-              </a>
+              </Link>
             </li>
           </ul>
         </div>
