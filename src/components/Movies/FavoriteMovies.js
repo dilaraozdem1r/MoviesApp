@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import "./MovieList.css";
+
 import Navbar from "../Navbar/Navbar";
-import { Link } from "react-router-dom";
+
 import MovieItem from "./MovieItem";
 
-const FavoriteFilms = () => {
-  const favorites = useSelector((state) => state.favorites);
+
+const FavoriteMovies = () => {
 
   const dispatch = useDispatch();
 
@@ -16,14 +16,16 @@ const FavoriteFilms = () => {
 
   return (
     <React.Fragment>
+      <div className="page-container" style={{height:'100vh'}}>
       <Navbar />
       <main>
         <section>
           <MovieItem />
         </section>
       </main>
+      </div>
     </React.Fragment>
   );
 };
 
-export default FavoriteFilms;
+export default FavoriteMovies;

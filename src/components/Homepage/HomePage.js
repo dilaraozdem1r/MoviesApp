@@ -5,6 +5,7 @@ import MovieList from '../Movies/MovieList';
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 
+
 const HomePage = () => {
 
     const dispatch = useDispatch();
@@ -16,10 +17,13 @@ const HomePage = () => {
   
 
     return (
+
       <React.Fragment>
+      <div className="page-container">
       <Navbar />
       <Header />
       <MovieList />
+      </div>
       </React.Fragment>
 
     )

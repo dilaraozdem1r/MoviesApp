@@ -1,6 +1,6 @@
 #movie_card{
   width: 100%;
-  height: 100%;
+  height: 90%;
   border-radius: 1rem;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in-out;
@@ -17,7 +17,7 @@
 #vote_span {
   position: absolute;
   top: .5rem;
-  right: .5rem;
+  left: .5rem;
   background-color: #E11299;
   border-radius:25%;
   padding: .5rem;
@@ -28,6 +28,14 @@
 
 #vote_icon{
   margin-right: .2rem;
+}
+
+#fav_button{
+  position: absolute;
+  top: .5rem;
+  right: .5rem;
+  padding: .5rem;
+ 
 }
 
 .card-title {

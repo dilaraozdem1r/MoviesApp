@@ -1,27 +1,35 @@
 import axios from 'axios';
 
-const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
-const apiKey = process.env.REACT_APP_API_KEY;
-
 const getMovies = () => {
+  const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
+  const apiKey = process.env.REACT_APP_API_KEY;
+  const pageCount = process.env.REACT_APP_PAGE_COUNT;
 
-    return (dispatch) => {
+  return async (dispatch) => {
+    const allMovies = [];
 
-      axios.get(`${apiEndpoint}api_key=${apiKey}&language=tr-TR&page=1`)
-        .then(response => {
-          const movies = response.data;
-          console.log(movies);
-          dispatch({
-            type: 'GET_MOVIES',
-            payload: movies.results,
-          });
-        })
-        .catch(error => {
-          // Hata durumunda gerekli işlemleri gerçekleştir
-        });
-    };
-   
+    try {
+      for (let i = 1; i <= pageCount; i++) {
+        const response = await axios.get(`${apiEndpoint}api_key=${apiKey}&language=tr-TR&page=${i}`);
+        const movies = response.data.results;
+        allMovies.push(...movies);
+      }
+
+      console.log(allMovies);
+
+      dispatch({
+        type: 'GET_MOVIES',
+        payload: allMovies,
+      });
+    } catch (error) {
+      // Hata durumunda gerekli işlemleri gerçekleştir
+    }
   };
+};
+
+
+
+ 
   
 
 const setSearchFilter = (filter) => {
@@ -49,4 +57,8 @@ const removeFavorites=(movie)=>{
   )
 }
 
-export { setSearchFilter, getMovies, addFavorites,removeFavorites };
+
+
+
+
+export { setSearchFilter, addFavorites,getMovies,removeFavorites };

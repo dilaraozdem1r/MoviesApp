@@ -3,14 +3,15 @@ import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Navbar from "../Navbar/Navbar";
 import { addFavorites, removeFavorites } from "../../actions/movieActions";
-import { ToastContainer,toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const MovieDetail = () => {
   const baseUrl = process.env.REACT_APP_SEARCH_BASE_URL;
   const apiKey = process.env.REACT_APP_API_KEY;
   const imageBaseUrl = process.env.REACT_APP_IMAGE_BASE_URL;
- 
+  const [loading, setLoading] = useState(true);
+
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
 
@@ -30,7 +31,7 @@ const MovieDetail = () => {
       });
 
     console.log(favorites);
-  
+    setLoading(false);
   }, [dispatch, id]);
 
   const favorites = useSelector((state) => state.favorites);
@@ -44,11 +45,9 @@ const MovieDetail = () => {
     }
   }, [movie, favorites]);
 
-  if (!movie) {
-    return <div>Movie not found</div>;
-  }
+ 
 
-  const handleAddToFavorites = () => {
+  const handleToFavorites = () => {
     if (isFavorite) {
       dispatch(removeFavorites(movie));
       toast.info("Film favorilerden çıkarıldı", { autoClose: 2000 });
@@ -57,8 +56,6 @@ const MovieDetail = () => {
       toast.success("Film favorilere eklendi", { autoClose: 2000 });
     }
     setIsFavorite(!isFavorite);
-  
-
   };
 
   return (
@@ -67,50 +64,61 @@ const MovieDetail = () => {
       <ToastContainer position="bottom-right" />
       <main>
         <div className="container">
-          <div className="row justify-content-center mt-3">
-            <div className="col-md-4">
-              <img
-                src={`${imageBaseUrl}${movie.poster_path}`}
-                className="img-fluid"
-                alt="Movie Poster"
-              />
-            </div>
-            <div className="col-md-8">
-              <h3 className="mt-3 position-relative">
-                {movie.title}{" "}
-                <span
-                  className="badge position-absolute top-0 end-0 fs-5"
-                  style={{ backgroundColor: "#E11299" }}
-                >
-                  <i className="fa-solid fa-star" style={{}}></i>{" "}
-                  {movie.vote_average.toString().substring(0, 3)}
-                </span>
-              </h3>
-              <p>({new Date(movie.release_date).getFullYear()})</p>
-             {movie.overview && <div>
-              <h6 className="lh-lg mt-5">Özet</h6>
-              <p className="lh-lg mt-2" style={{ textAlign: "justify" }}>
-                {movie.overview}
-              </p>
-              </div> }
-              
-              
-
-              <button
-                type="button"
-                className="btn btn-dark mt-2"
-                onClick={handleAddToFavorites}
-                title={isFavorite ? "Favorilerden Çıkar" : "Favorilere Ekle"}
-              >
-                {!isFavorite ? (
-                  <i className="fa-regular fa-heart" ></i>
-                ) : (
-                  <i className="fa-solid fa-heart" style={{ color: "#E11299" }}></i>
-                )}
-              </button>
-            
+          {loading &&
+            <div className="d-flex justify-content-center">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Loading...</span>
             </div>
           </div>
+}
+          {movie && (
+            <div className="row justify-content-center mt-3">
+              <div className="col-md-4">
+                <img
+                  src={`${imageBaseUrl}${movie.poster_path}`}
+                  className="img-fluid"
+                  alt="Movie Poster"
+                />
+              </div>
+              <div className="col-md-8">
+                <h3 className="mt-3 position-relative fw-bold">
+                  {movie.title}{" "}
+                  <span
+                    className="badge position-absolute top-0 end-0 fs-5"
+                    style={{ backgroundColor: "#E11299" }}
+                  >
+                    <i className="fa-solid fa-star" style={{}}></i>{" "}
+                    {movie.vote_average.toString().substring(0, 3)}
+                  </span>
+                </h3>
+                <p>({new Date(movie.release_date).getFullYear()})</p>
+                {movie.overview && (
+                  <div>
+                    <h6 className="lh-lg mt-5">Özet</h6>
+                    <p className="lh-lg mt-2" style={{ textAlign: "justify" }}>
+                      {movie.overview}
+                    </p>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  className="btn btn-dark mt-2"
+                  onClick={handleToFavorites}
+                  title={isFavorite ? "Favorilerden Çıkar" : "Favorilere Ekle"}
+                >
+                  {!isFavorite ? (
+                    <i className="fa-regular fa-heart"></i>
+                  ) : (
+                    <i
+                      className="fa-solid fa-heart"
+                      style={{ color: "#E11299" }}
+                    ></i>
+                  )}
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </React.Fragment>

@@ -22,7 +22,7 @@ const Navbar = () => {
   const searchEnabled = useSelector((state) => state.searchEnabled);
 
   return (
-    <nav id="navbar_id" className="navbar navbar-expand-lg bg-dark">
+    <nav id="navbar_id" className="navbar navbar-expand-lg bg-dark ">
       <div className="container-fluid">
       <a className="navbar-brand text-white">TMDB</a>
        
