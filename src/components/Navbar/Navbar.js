@@ -14,6 +14,7 @@ const Navbar = () => {
     const filter = event.target.value;
     dispatch(setSearchFilter(filter));
   };
+  
   useEffect(() => {
     dispatch(getMovies());
   }, [dispatch]);

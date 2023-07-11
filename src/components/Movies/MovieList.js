@@ -8,7 +8,6 @@ const MovieList = () => {
 
   return (
     <React.Fragment>
-
       <main>
         <section>
           <MovieItem />

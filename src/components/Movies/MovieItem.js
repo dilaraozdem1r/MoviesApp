@@ -8,6 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import trTranslations from "../../translations/tr-TR.json";
 import enTranslations from "../../translations/en-EN.json";
+import Pagination from "../Pagination/Pagination";
 
 const MovieItem = ({}) => {
   const location = useLocation();
@@ -15,6 +16,9 @@ const MovieItem = ({}) => {
   const searchFilter = useSelector((state) => state.searchFilter);
   const [loading, setLoading] = useState(true);
   const language = useSelector((state) => state.language);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(8); // her sayfada 10 film
 
   const movies = useSelector((state) => {
     if (location.pathname === "/favorites") {
@@ -24,6 +28,8 @@ const MovieItem = ({}) => {
     }
   });
 
+  const [filteredMovies, setFilteredMovies] = useState(movies); // filtrelenmiş filmler
+
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites);
 
@@ -31,7 +37,19 @@ const MovieItem = ({}) => {
     setTimeout(() => {
       setLoading(false);
     }, 800);
-  }, [dispatch, favorites]);
+  }, [dispatch, favorites, movies]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+
+    setFilteredMovies(
+      movies
+        ? movies.filter((movie) =>
+            movie.title.toLowerCase().includes(searchFilter.toLowerCase())
+          )
+        : []
+    );
+  }, [searchFilter, favorites, language, movies]);
 
   const translations = {
     "tr-TR": trTranslations,
@@ -57,12 +75,12 @@ const MovieItem = ({}) => {
     }
   };
 
-  // Filmleri searchFilter durumuna göre filtreleme
-  const filteredMovies = movies
-    ? movies.filter((movie) =>
-        movie.title.toLowerCase().includes(searchFilter.toLowerCase())
-      )
-    : [];
+  const startIndex = (currentPage - 1) * pageSize;
+  const endIndex = startIndex + pageSize;
+  const moviesToShow = filteredMovies.slice(startIndex, endIndex);
+
+  const buttonAddFavText = getTranslatedText("favorilere ekle");
+  const buttonRemoveFavText = getTranslatedText("favorilerden çıkar");
 
   return (
     <React.Fragment>
@@ -78,56 +96,67 @@ const MovieItem = ({}) => {
             </div>
           </div>
         )}
+
         {filteredMovies.length > 0 && !loading && (
           <div className="row">
-            {filteredMovies.sort((a, b) => a.id - b.id) .map((movie) => (
-              <div className="col-md-3 mt-4" key={movie.id}>
-                <Link
-                  to={`/movie/${movie.id}`}
-                  className="text-decoration-none"
-                >
-                  <div
-                    id="movie_card"
-                    className="card mb-2"
-                    style={{ width: "100%", height: "100%" }}
+            {moviesToShow
+              .sort((a, b) => a.id - b.id)
+              .map((movie) => (
+                <div className="col-md-3 mt-4" key={movie.id}>
+                  <Link
+                    to={`/movie/${movie.id}`}
+                    className="text-decoration-none"
                   >
-                    <img
-                      src={`${imageBaseUrl}${movie.poster_path}`}
-                      className="card-img-top"
-                      alt="Movie Poster"
-                    />
-                    <div className="card-body">
-                      <h5 className="card-title fw-bold mt-3">{movie.title}</h5>
+                    <div
+                      id="movie_card"
+                      className="card mb-2"
+                      style={{ width: "100%", height: "100%" }}
+                    >
+                      <img
+                        src={`${imageBaseUrl}${movie.poster_path}`}
+                        className="card-img-top"
+                        alt="Movie Poster"
+                      />
+                      <div className="card-body">
+                        <h5 className="card-title fw-bold mt-3">
+                          {movie.title}
+                        </h5>
 
-                      <button
-                        id="fav_button"
-                        type="button"
-                        className="btn btn-dark"
-                        onClick={(event) => handleToFavorites(event, movie)}
-                        title={
-                          favorites.some((fav) => fav.id === movie.id)
-                            ? "Favorilerden Çıkar"
-                            : "Favorilere Ekle"
-                        }
-                      >
-                        {!favorites.some((fav) => fav.id === movie.id) ? (
-                          <i className="fa-regular fa-heart fa-xs"></i>
-                        ) : (
-                          <i
-                            className="fa-solid fa-heart"
-                            style={{ color: "#E11299" }}
-                          ></i>
-                        )}
-                      </button>
-                      <span id="vote_span" className="badge">
-                        <i id="vote_icon" className="fa-solid fa-star"></i>
-                        {movie.vote_average.toString().substring(0, 3)}
-                      </span>
+                        <button
+                          id="fav_button"
+                          type="button"
+                          className="btn btn-dark"
+                          onClick={(event) => handleToFavorites(event, movie)}
+                          title={
+                            favorites.some((fav) => fav.id === movie.id)
+                              ? buttonRemoveFavText
+                              : buttonAddFavText
+                          }
+                        >
+                          {!favorites.some((fav) => fav.id === movie.id) ? (
+                            <i className="fa-regular fa-heart fa-xs"></i>
+                          ) : (
+                            <i
+                              className="fa-solid fa-heart"
+                              style={{ color: "#E11299" }}
+                            ></i>
+                          )}
+                        </button>
+                        <span id="vote_span" className="badge">
+                          <i id="vote_icon" className="fa-solid fa-star"></i>
+                          {movie.vote_average.toString().substring(0, 3)}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </div>
-            ))}
+                  </Link>
+                </div>
+              ))}
+
+            <Pagination
+              currentPage={currentPage}
+              totalPages={Math.ceil(filteredMovies.length / pageSize)}
+              onPageChange={setCurrentPage}
+            />
           </div>
         )}
       </div>

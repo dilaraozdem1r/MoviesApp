@@ -74,6 +74,8 @@ const MovieDetail = () => {
   const ozetText = getTranslatedText("özet");
   const favAddText=getTranslatedText("film favorilere eklendi");
   const favRemoveText=getTranslatedText("film favorilerden çıkarıldı");
+  const buttonAddFavText=getTranslatedText("favorilere ekle");
+  const buttonRemoveFavText=getTranslatedText("favorilerden çıkar");
 
   return (
     <React.Fragment>
@@ -123,7 +125,7 @@ const MovieDetail = () => {
                   type="button"
                   className="btn btn-dark mt-2"
                   onClick={handleToFavorites}
-                  title={isFavorite ? "Favorilerden Çıkar" : "Favorilere Ekle"}
+                  title={isFavorite ? buttonRemoveFavText : buttonAddFavText}
                 >
                   {!isFavorite ? (
                     <i className="fa-regular fa-heart"></i>
