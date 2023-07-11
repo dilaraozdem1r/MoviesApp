@@ -6,6 +6,7 @@ const initialState = {
   searchFilter: "",
   searchEnabled: true,
   favorites: [],
+  language: "tr-TR",
 };
 
 const MovieReducer = (state = initialState, action) => {
@@ -37,17 +38,31 @@ const MovieReducer = (state = initialState, action) => {
         ...state,
         favorites: [...state.favorites, movieToAdd],
       };
+
     case "REMOVE_FAV":
       const movieToRemove = action.payload;
       const updatedFavorites = state.favorites.filter(
         (movie) => movie.id !== movieToRemove.id
       );
-
       return {
         ...state,
         favorites: updatedFavorites,
       };
+
+    case "SET_LANGUAGE_EN":
+      return {
+        ...state,
+        language: "en-US",
+      };
+
+    case "SET_LANGUAGE_TR":
+      return {
+        ...state,
+        language: "tr-TR",
+      };
+
       
+
     default:
       return state;
   }

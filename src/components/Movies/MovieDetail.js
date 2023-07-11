@@ -2,15 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Navbar from "../Navbar/Navbar";
-import { addFavorites, removeFavorites } from "../../actions/movieActions";
+import { addFavorites, removeFavorites,disableSearch } from "../../actions/movieActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import trTranslations from "../../translations/tr-TR.json";
+import enTranslations from "../../translations/en-EN.json";
+import Footer from "../Footer/Footer";
 
 const MovieDetail = () => {
   const baseUrl = process.env.REACT_APP_SEARCH_BASE_URL;
   const apiKey = process.env.REACT_APP_API_KEY;
   const imageBaseUrl = process.env.REACT_APP_IMAGE_BASE_URL;
   const [loading, setLoading] = useState(true);
+  const language = useSelector((state) => state.language);
 
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
@@ -19,20 +23,22 @@ const MovieDetail = () => {
 
   useEffect(() => {
     // MovieDetail bileşeni yüklendiğinde search input'unu devre dışı bırak
-    dispatch({ type: "DISABLE_SEARCH" });
+    dispatch(disableSearch());
 
     // TMDb API'den film ayrıntılarını çekmek için istek at
-    fetch(`${baseUrl}${id}?api_key=${apiKey}&language=tr-TR`)
+    fetch(`${baseUrl}${id}?api_key=${apiKey}&language=${language}`)
       .then((response) => response.json())
-      .then((data) => setMovie(data))
+      .then((data) => {
+        setTimeout(() => {
+          setMovie(data);
+          setLoading(false);
+        }, 800);
+      })
       .catch((error) => {
         console.log("Error fetching movie details:", error);
         setMovie(null);
       });
-
-    console.log(favorites);
-    setLoading(false);
-  }, [dispatch, id]);
+  }, [dispatch, id, language]);
 
   const favorites = useSelector((state) => state.favorites);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -45,32 +51,44 @@ const MovieDetail = () => {
     }
   }, [movie, favorites]);
 
- 
-
   const handleToFavorites = () => {
     if (isFavorite) {
       dispatch(removeFavorites(movie));
-      toast.info("Film favorilerden çıkarıldı", { autoClose: 2000 });
+      toast.info(favRemoveText, { autoClose: 2000 });
     } else {
       dispatch(addFavorites(movie));
-      toast.success("Film favorilere eklendi", { autoClose: 2000 });
+      toast.success(favAddText, { autoClose: 2000 });
     }
     setIsFavorite(!isFavorite);
   };
 
+  const translations = {
+    "tr-TR": trTranslations,
+    "en-US": enTranslations,
+  };
+
+  const getTranslatedText = (key) => {
+    return translations[language][key] || key;
+  };
+  
+  const ozetText = getTranslatedText("özet");
+  const favAddText=getTranslatedText("film favorilere eklendi");
+  const favRemoveText=getTranslatedText("film favorilerden çıkarıldı");
+
   return (
     <React.Fragment>
+      <div className="page-container" style={{height:'100vh'}}>
       <Navbar />
       <ToastContainer position="bottom-right" />
       <main>
         <div className="container">
-          {loading &&
+          {loading && (
             <div className="d-flex justify-content-center">
-            <div className="spinner-border" role="status">
-              <span className="visually-hidden">Loading...</span>
+              <div className="spinner-border mt-5" role="status">
+                <span className="visually-hidden"></span>
+              </div>
             </div>
-          </div>
-}
+          )}
           {movie && (
             <div className="row justify-content-center mt-3">
               <div className="col-md-4">
@@ -94,7 +112,7 @@ const MovieDetail = () => {
                 <p>({new Date(movie.release_date).getFullYear()})</p>
                 {movie.overview && (
                   <div>
-                    <h6 className="lh-lg mt-5">Özet</h6>
+                    <h6 className="lh-lg mt-5">{ozetText}</h6>
                     <p className="lh-lg mt-2" style={{ textAlign: "justify" }}>
                       {movie.overview}
                     </p>
@@ -121,6 +139,8 @@ const MovieDetail = () => {
           )}
         </div>
       </main>
+      <Footer/>
+      </div>
     </React.Fragment>
   );
 };

@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import Navbar from "../Navbar/Navbar";
 
 import MovieItem from "./MovieItem";
+import Footer from "../Footer/Footer";
+import { enableSearch } from "../../actions/movieActions";
 
 
 const FavoriteMovies = () => {
@@ -11,7 +13,7 @@ const FavoriteMovies = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch({ type: "ENABLE_SEARCH" });
+    dispatch(enableSearch());
   }, []);
 
   return (
@@ -23,6 +25,7 @@ const FavoriteMovies = () => {
           <MovieItem />
         </section>
       </main>
+      <Footer />
       </div>
     </React.Fragment>
   );
