@@ -3,7 +3,7 @@ import axios from "axios";
 const getMovies = () => {
   const apiEndpoint = process.env.REACT_APP_API_ENDPOINT;
   const apiKey = process.env.REACT_APP_API_KEY;
-  const pageCount = process.env.REACT_APP_PAGE_COUNT;
+  const pageCount = process.env.REACT_APP_REQUEST_PAGE_COUNT;
 
   return async (dispatch, getState) => {
     const allMovies = [];
@@ -18,14 +18,13 @@ const getMovies = () => {
         allMovies.push(...movies);
       }
 
-      console.log(allMovies);
 
       dispatch({
         type: "GET_MOVIES",
         payload: allMovies,
       });
     } catch (error) {
-      // Hata durumunda gerekli işlemleri gerçekleştir
+      console.error("error", error);
     }
   };
 };
@@ -82,6 +81,13 @@ const setLanguageTr = () => {
     });
 };
 
+const resetFavs = () => {
+  return (dispatch) =>
+    dispatch({
+      type: "RESET_FAVS",
+    });
+};
+
 export {
   setSearchFilter,
   addFavorites,
@@ -91,4 +97,5 @@ export {
   disableSearch,
   setLanguageEn,
   setLanguageTr,
+  resetFavs,
 };

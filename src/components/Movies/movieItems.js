@@ -2,23 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import "./MovieItem.css";
-import { addFavorites, removeFavorites } from "../../actions/movieActions";
+import "./movieItems.css";
+import {
+  addFavorites,
+  getMovies,
+  removeFavorites,
+} from "../../actions/movieActions";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import trTranslations from "../../translations/tr-TR.json";
 import enTranslations from "../../translations/en-EN.json";
-import Pagination from "../Pagination/Pagination";
+import Pagination from "../pagination/pagination";
 
-const MovieItem = ({}) => {
+const MovieItems = ({}) => {
   const location = useLocation();
   const imageBaseUrl = process.env.REACT_APP_IMAGE_BASE_URL;
   const searchFilter = useSelector((state) => state.searchFilter);
-  const [loading, setLoading] = useState(true);
   const language = useSelector((state) => state.language);
-
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(8); // her sayfada 10 film
+  const [pageSize, setPageSize] = useState(8);
 
   const movies = useSelector((state) => {
     if (location.pathname === "/favorites") {
@@ -28,20 +30,15 @@ const MovieItem = ({}) => {
     }
   });
 
-  const [filteredMovies, setFilteredMovies] = useState(movies); // filtrelenmiş filmler
-
+  const [filteredMovies, setFilteredMovies] = useState([]);
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites);
 
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 800);
-  }, [dispatch, favorites, movies]);
+    setCurrentPage(1);
+  }, [searchFilter]);
 
   useEffect(() => {
-    setCurrentPage(1);
-
     setFilteredMovies(
       movies
         ? movies.filter((movie) =>
@@ -73,31 +70,27 @@ const MovieItem = ({}) => {
       dispatch(addFavorites(movie));
       toast.success(favAddText, { autoClose: 2000 });
     }
+    
   };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentPage]);
 
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
   const moviesToShow = filteredMovies.slice(startIndex, endIndex);
-
   const buttonAddFavText = getTranslatedText("favorilere ekle");
   const buttonRemoveFavText = getTranslatedText("favorilerden çıkar");
 
   return (
-    <React.Fragment>
+    <div className="page-container">
       <ToastContainer position="bottom-right" />
       <div className="container">
-        {filteredMovies.length === 0 && (
+        {moviesToShow.length === 0 && (
           <h3 className="text-center mt-5">{filmText}!</h3>
         )}
-        {loading && (
-          <div className="d-flex justify-content-center">
-            <div className="spinner-border mt-5" role="status">
-              <span className="visually-hidden"></span>
-            </div>
-          </div>
-        )}
-
-        {filteredMovies.length > 0 && !loading && (
+        {moviesToShow.length > 0 && (
           <div className="row">
             {moviesToShow
               .sort((a, b) => a.id - b.id)
@@ -118,10 +111,9 @@ const MovieItem = ({}) => {
                         alt="Movie Poster"
                       />
                       <div className="card-body">
-                        <h5 className="card-title fw-bold mt-3">
+                        <h5 className="card-title fw-bold mt-3 text-center">
                           {movie.title}
                         </h5>
-
                         <button
                           id="fav_button"
                           type="button"
@@ -160,8 +152,8 @@ const MovieItem = ({}) => {
           </div>
         )}
       </div>
-    </React.Fragment>
+    </div>
   );
 };
 
-export default MovieItem;
+export default MovieItems;

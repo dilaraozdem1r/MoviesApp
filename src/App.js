@@ -1,16 +1,10 @@
 
 import './App.css';
-import Navbar from './components/Navbar/Navbar';
-import Header from './components/Header/Header';
-import MovieList from './components/Movies/MovieList';
-import MovieDetail from './components/Movies/MovieDetail';
-import HomePage from './components/Homepage/HomePage';
+import MovieList from './components/movies/movieList';
+import MovieDetail from './pages/movieDetail';
+import HomePage from './pages/homePage';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import FavoriteMovies from './components/Movies/FavoriteMovies';
-
-
-
-
+import FavoriteMovies from './pages/favoriteMovies';
 
 function App() {
  

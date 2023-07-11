@@ -1,41 +1,38 @@
-#movie_card{
+#movie_card {
   width: 100%;
   height: 90%;
   border-radius: 1rem;
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in-out;
   cursor: pointer;
-  
 }
 
 #movie_card:hover {
   transform: scale(1.05);
   box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.4);
-
 }
 
 #vote_span {
   position: absolute;
-  top: .5rem;
-  left: .5rem;
-  background-color: #E11299;
-  border-radius:25%;
-  padding: .5rem;
+  top: 0.5rem;
+  left: 0.5rem;
+  background-color: #e11299;
+  border-radius: 25%;
+  padding: 0.5rem;
   color: #fff;
   font-weight: bold;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
-#vote_icon{
-  margin-right: .2rem;
+#vote_icon {
+  margin-right: 0.2rem;
 }
 
-#fav_button{
+#fav_button {
   position: absolute;
-  top: .5rem;
-  right: .5rem;
-  padding: .5rem;
- 
+  top: 0.5rem;
+  right: 0.5rem;
+  padding: 0.5rem;
 }
 
 .card-title {

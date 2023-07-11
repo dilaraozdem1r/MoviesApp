@@ -1,28 +1,31 @@
-import React from 'react';
+import React,{useRef} from "react";
 
 const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const pageNumbers = [];
+  const pageRef = useRef(null);
 
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
+  
 
   return (
     <nav>
-      <ul className="pagination  justify-content-center py-5 " >
-      {currentPage > 1 && (
+      <ul className="pagination  justify-content-center py-5 ">
+        {currentPage > 1 && (
           <li className="page-item">
-            <button className="page-link bg-dark text-white" onClick={() => onPageChange(currentPage - 1)}>
-            <span aria-hidden="true">&laquo;</span>
+            <button
+              className="page-link bg-dark text-white"
+              onClick={() => onPageChange(currentPage - 1)}
+            >
+              <span aria-hidden="true">&laquo;</span>
             </button>
           </li>
         )}
-
         {pageNumbers.map((number) => (
           <li
             key={number}
-            className={`page-item  ${currentPage === number ? 'active' : ''}  `}
-           
+            className={`page-item  ${currentPage === number ? "active" : ""}  `}
           >
             <button
               className="page-link bg-dark text-white"
@@ -33,10 +36,13 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
           </li>
         ))}
 
-{currentPage < totalPages && (
+        {currentPage < totalPages && (
           <li className="page-item">
-            <button className="page-link bg-dark text-white" onClick={() => onPageChange(currentPage + 1)}>
-            <span aria-hidden="true">&raquo;</span>
+            <button
+              className="page-link bg-dark text-white"
+              onClick={() => onPageChange(currentPage + 1)}
+            >
+              <span aria-hidden="true">&raquo;</span>
             </button>
           </li>
         )}

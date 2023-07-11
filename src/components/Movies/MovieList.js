@@ -1,16 +1,20 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import MovieItem from "./MovieItem";
-
+import React, {useEffect} from "react";
+import { useSelector,useDispatch } from "react-redux";
+import MovieItems from "./movieItems";
+import { enableSearch } from "../../actions/movieActions";
 
 const MovieList = () => {
- 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(enableSearch());
+  }, []);
 
   return (
     <React.Fragment>
       <main>
         <section>
-          <MovieItem />
+          <MovieItems />
         </section>
       </main>
     </React.Fragment>

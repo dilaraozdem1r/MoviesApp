@@ -16,11 +16,13 @@ const MovieReducer = (state = initialState, action) => {
         ...state,
         movies: action.payload,
       };
+
     case "SET_SEARCH_FILTER":
       return {
         ...state,
         searchFilter: action.payload,
       };
+
     case "ENABLE_SEARCH":
       return {
         ...state,
@@ -49,6 +51,12 @@ const MovieReducer = (state = initialState, action) => {
         favorites: updatedFavorites,
       };
 
+    case "RESET_FAVS":
+      return {
+        ...state,
+        favorites: [],
+      };
+
     case "SET_LANGUAGE_EN":
       return {
         ...state,
@@ -60,8 +68,6 @@ const MovieReducer = (state = initialState, action) => {
         ...state,
         language: "tr-TR",
       };
-
-      
 
     default:
       return state;
